@@ -15,7 +15,7 @@ print(f"Среднее: {average}")
 print(f"Максимум: {max}")
 print(f"Минимум: {min}")
 
-with open('result.txt','w',encoding='utf-8') as file:
+with open('result.txt', 'w', encoding='utf-8') as file:
     file.write(f"Сумма: {sum}\n")
     file.write(f"Среднее: {average}\n")
     file.write(f"Максимум: {max}\n")
