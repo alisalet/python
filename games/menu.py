@@ -1,10 +1,9 @@
-import random
 from tictactoe import tictactoe
 from random_number import guess_number
 from blackjack import blackjack
 
 def display_menu():
-    print('\nДобро пожаловать в коллекцию игр!')
+    print('\nВо что хотите поиграть?')
     print('1. Угадай число')
     print('2. Блэкджек (21 очко)')
     print('3. Крестики-нолики')

@@ -1,5 +1,4 @@
 import random
-from random import randint
 
 def blackjack():
     print('\n==Первая раздача==')
