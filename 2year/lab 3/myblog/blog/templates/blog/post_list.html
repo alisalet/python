@@ -1,0 +1,35 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Главная страница - Все посты о путешествиях{% endblock %}
+
+{% block content %}
+<h2>Последние записи в блоге</h2>
+
+{% for post in posts %}
+    <div class="post">
+        <h3><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        {% endif %}
+        <p>{{ post.content|truncatewords:30 }}</p>
+        <div class="post-meta">
+            <small>
+                <strong>Страна:</strong>
+                {% if post.country %}
+                    <a href="{% url 'country_posts' post.country.id %}">
+                        {{ post.country.name }}
+                    </a>
+                {% else %}
+                    <span>Не указана</span>
+                {% endif %}
+                |
+                <strong>Тема:</strong> <a href="{% url 'posts_by_type' post.post_type %}">{{ post.get_post_type_display }}</a> |
+                <strong>Автор:</strong> {{ post.author }} |
+                <strong>Опубликовано:</strong> {{ post.published_date|date:"d.m.Y" }}
+            </small>
+        </div>
+    </div>
+{% empty %}
+    <p>Пока нет записей в блоге</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}El Mejor Viaje{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h1><a href="/">El Mejor Viaje</a></h1>
+        <p>Блог о путешествиях по Испании и Латинской Америке</p>
+    </div>
+
+    <div class="nav">
+        <a href="/">Главная</a>
+
+        <div class="dropdown">
+            <button class="dropbtn">Страны</button>
+            <div class="dropdown-content">
+                {% for country in countries %}
+                    <a href="{% url 'country_posts' country.id %}">{{ country.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Темы</button>
+            <div class="dropdown-content">
+                {% for type_key, type_name in post_types %}
+                    <a href="{% url 'posts_by_type' type_key %}">{{ type_name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="auth-links">
+            {% if user.is_authenticated %}
+                <span class="user-greeting">Привет, {{ user.username }}!</span>
+                {% if user.is_staff %}
+                    <a href="/admin/" class="admin-link">Админка</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="logout-link">Выйти</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-link">Войти</a>
+                <a href="{% url 'register' %}" class="register-link">Регистрация</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

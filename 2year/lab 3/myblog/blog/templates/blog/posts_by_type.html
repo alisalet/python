@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Посты на тему: {{ type_display }}{% endblock %}
+
+{% block content %}
+<h2>Все посты на тему: {{ type_display }}</h2>
+
+{% for post in posts %}
+    <div class="post">
+        <h3><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        {% endif %}
+        <p>{{ post.content|truncatewords:30 }}</p>
+        <div class="post-meta">
+            <small>
+                <strong>Страна:</strong>
+                <a href="{% url 'country_posts' post.country.id %}">
+                    {% if post.country.flag_image %}
+                        <img src="{{ post.country.flag_image.url }}" alt="{{ post.country.name }}" class="country-flag">
+                    {% endif %}
+                    {{ post.country.name }}
+                </a> |
+                <strong>Автор:</strong> {{ post.author }} |
+                <strong>Опубликовано:</strong> {{ post.published_date|date:"d.m.Y" }}
+            </small>
+        </div>
+    </div>
+{% empty %}
+    <p>Пока нет постов на тему "{{ type_display }}".</p>
+{% endfor %}
+
+<div class="post-links">
+    <a href="{% url 'post_list' %}">⭠ Назад ко всем записям</a>
+</div>
+{% endblock %}

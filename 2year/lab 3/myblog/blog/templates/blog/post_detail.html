@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <article class="post">
+        <h2>{{ post.title }}</h2>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        {% endif %}
+        <p>{{ post.content|linebreaks }}</p>
+        <div class="post-meta">
+            <p><strong>Страна:</strong>
+                <a href="{% url 'country_posts' post.country.id %}">
+                    {{ post.country.name }}
+                </a>
+            </p>
+            <p><strong>Тема:</strong> <a href="{% url 'posts_by_type' post.post_type %}">{{ post.get_post_type_display }}</a></p>
+            <p><strong>Автор:</strong> {{ post.author }}</p>
+            <p><strong>Опубликовано:</strong> {{ post.published_date|date:"d.m.Y H:i" }}</p>
+        </div>
+
+        <div class="post-links">
+            <a href="{% url 'post_list' %}">⭠ Назад ко всем записям</a>
+        </div>
+    </article>
+
+    <section class="comments">
+        <h3>Комментарии ({{ post.comments.count }})</h3>
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'add_comment' pk=post.pk %}">
+            {% csrf_token %}
+            <textarea name="text" placeholder="Оставьте ваш комментарий..." required></textarea>
+            <button type="submit">Отправить комментарий</button>
+        </form>
+        {% else %}
+        <div class="comments-login">
+            <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставлять комментарии</p>
+        </div>
+        {% endif %}
+
+        {% for comment in post.comments.all %}
+        <div class="comment">
+            <strong>{{ comment.author.username }}</strong>
+            <small>{{ comment.created_date|date:"d.m.Y H:i" }}</small>
+            <p>{{ comment.text }}</p>
+        </div>
+        {% empty %}
+        <p>Пока нет комментариев. Будьте первым!</p>
+        {% endfor %}
+    </section>
+{% endblock %}
